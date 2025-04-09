@@ -43,7 +43,12 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <!-- Local TOC -->
               <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">SolarPower Forecast: Optimizing Energy Consumption and Panel Efficiency</a></li>
+<li><a class="reference internal" href="#">SolarPower Forecast: Optimizing Energy Consumption and Panel Efficiency</a><ul>
+<li><a class="reference internal" href="#objectif">Objectif:</a></li>
+<li><a class="reference internal" href="#a-propos-des-donnees">À propos des données:</a></li>
+<li><a class="reference internal" href="#bibliotheques-utilisees">Bibliotheques utilisées:</a></li>
+</ul>
+</li>
 </ul>
 </div>
         </div>
@@ -72,11 +77,64 @@
              
   <section id="solarpower-forecast-optimizing-energy-consumption-and-panel-efficiency">
 <h1>SolarPower Forecast: Optimizing Energy Consumption and Panel Efficiency<a class="headerlink" href="#solarpower-forecast-optimizing-energy-consumption-and-panel-efficiency" title="Lien vers cette rubrique"></a></h1>
-<p>Add your content using <code class="docutils literal notranslate"><span class="pre">reStructuredText</span></code> syntax. See the
-<a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html">reStructuredText</a>
-documentation for details.</p>
+<p>Ce <strong>ReadTheDoc</strong> a pour objectif de développer un modèle de prévision de la consommation d’énergie générée par des panneaux solaires photovoltaïques, afin d’optimiser la production d’énergie et de déterminer le nombre de panneaux nécessaires pour répondre à la demande énergétique, tout en assurant une maintenance prédictive.</p>
+<section id="objectif">
+<h2>Objectif:<a class="headerlink" href="#objectif" title="Lien vers cette rubrique"></a></h2>
+<ul class="simple">
+<li><p><strong>Développer un modèle de prévision</strong> de la consommation d’énergie en utilisant des panneaux solaires photovoltaïques, en exploitant les données historiques de consommation d’énergie et de production solaire.</p></li>
+<li><p><strong>Comparer différentes approches de modélisation</strong> des séries temporelles (ARIMA, LSTM, XGBoost, etc.) pour identifier la méthode la plus performante pour prédire la consommation d’énergie et la production des panneaux solaires.</p></li>
+<li><p><strong>Analyser les tendances et les facteurs d’influence</strong> (ensoleillement, température, encrassement des panneaux, etc.) sur la production d’énergie solaire et la demande en énergie.</p></li>
+<li><p><strong>Évaluer les performances du modèle</strong> à l’aide de métriques appropriées (RMSE, MAE, R²) et optimiser les hyperparamètres pour une meilleure précision dans les prévisions.</p></li>
+<li><p><strong>Utiliser les prévisions pour déterminer le nombre de panneaux solaires nécessaires</strong> afin de répondre aux besoins énergétiques tout en maximisant l’efficacité énergétique.</p></li>
+</ul>
+</section>
+<section id="a-propos-des-donnees">
+<h2>À propos des données:<a class="headerlink" href="#a-propos-des-donnees" title="Lien vers cette rubrique"></a></h2>
+<ul class="simple">
+<li><p><strong>Données de consommation électrique :</strong> Issues de <cite>NYC OpenData &lt;https://data.cityofnewyork.us/Housing-Development/Electric-Consumption-And-Cost-2010-Feb-2025-/jr24-e7cr&gt;</cite>, ces données fournissent l’historique de la consommation et du coût de l’électricité pour divers bâtiments de la ville de New York.</p></li>
+<li><p><strong>Données de production solaire :</strong> Obtenues à partir du <cite>NSRDB Data Viewer &lt;https://nsrdb.nrel.gov/data-viewer&gt;</cite>, ces données incluent des indicateurs clés du rayonnement solaire, tels que l’irradiance horizontale globale (GHI), l’irradiance normale directe (DNI) et l’irradiance horizontale diffuse (DHI), permettant d’estimer la production d’énergie solaire.</p></li>
+</ul>
+</section>
+<section id="bibliotheques-utilisees">
+<h2>Bibliotheques utilisées:<a class="headerlink" href="#bibliotheques-utilisees" title="Lien vers cette rubrique"></a></h2>
+<ul>
+<li><p><strong>sklearn.preprocessing</strong>:
+- <code class="docutils literal notranslate"><span class="pre">MinMaxScaler</span></code>
+- <code class="docutils literal notranslate"><span class="pre">StandardScaler</span></code></p></li>
+<li><p><strong>numpy</strong> (<code class="docutils literal notranslate"><span class="pre">np</span></code>)</p></li>
+<li><p><strong>datetime</strong>:
+- <code class="docutils literal notranslate"><span class="pre">datetime</span></code>
+- <code class="docutils literal notranslate"><span class="pre">timedelta</span></code></p></li>
+<li><p><strong>matplotlib</strong>:
+- <code class="docutils literal notranslate"><span class="pre">matplotlib.dates</span></code> (<code class="docutils literal notranslate"><span class="pre">mdates</span></code>)
+- <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code> (<code class="docutils literal notranslate"><span class="pre">plt</span></code>)</p></li>
+<li><p><strong>seaborn</strong> (<code class="docutils literal notranslate"><span class="pre">sns</span></code>)</p></li>
+<li><p><strong>pandas</strong> (<code class="docutils literal notranslate"><span class="pre">pd</span></code>)</p></li>
+<li><p><strong>pvlib</strong></p></li>
+<li><p><strong>statsmodels</strong>:
+- <code class="docutils literal notranslate"><span class="pre">statsmodels.api</span></code> (<code class="docutils literal notranslate"><span class="pre">sm</span></code>)
+- <code class="docutils literal notranslate"><span class="pre">adfuller</span></code>
+- <code class="docutils literal notranslate"><span class="pre">kpss</span></code>
+- <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code>
+- <code class="docutils literal notranslate"><span class="pre">seasonal_decompose</span></code></p></li>
+<li><p><strong>optuna</strong></p></li>
+<li><p><strong>torch</strong>:
+- <code class="docutils literal notranslate"><span class="pre">torch</span></code>
+- <code class="docutils literal notranslate"><span class="pre">torch.nn</span></code> (<code class="docutils literal notranslate"><span class="pre">nn</span></code>)
+- <code class="docutils literal notranslate"><span class="pre">torch.optim</span></code> (<code class="docutils literal notranslate"><span class="pre">optim</span></code>)
+- <code class="docutils literal notranslate"><span class="pre">torch.utils.data</span></code>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DataLoader</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TensorDataset</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Dataset</span></code></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
 <div class="toctree-wrapper compound">
 </div>
+</section>
 </section>
 
 
