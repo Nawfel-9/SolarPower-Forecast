@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SolarPower Forecast &mdash; Documentation SolarPower-Forecast </title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
@@ -48,6 +48,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">SolarPower Forecast</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#context">Context:</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#objectif">Objectif:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#defis-a-relever">Défis à relever:</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#a-propos-des-donnees">À propos des données:</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#bibliotheques-utilisees">Bibliotheques utilisées:</a></li>
 </ul>
@@ -95,6 +96,18 @@
 <li><p><strong>Analyser les tendances et les facteurs d’influence</strong> (ensoleillement, température, encrassement des panneaux, etc.) sur la production d’énergie solaire et la demande en énergie.</p></li>
 <li><p><strong>Évaluer les performances du modèle</strong> à l’aide de métriques appropriées (RMSE, MAE, R²) et optimiser les hyperparamètres pour une meilleure précision dans les prévisions.</p></li>
 <li><p><strong>Utiliser les prévisions pour déterminer le nombre de panneaux solaires nécessaires</strong> afin de répondre aux besoins énergétiques tout en maximisant l’efficacité énergétique.</p></li>
+</ul>
+</section>
+<section id="defis-a-relever">
+<h2>Défis à relever:<a class="headerlink" href="#defis-a-relever" title="Lien vers cette rubrique"></a></h2>
+<p>La réalisation de ce projet soulève plusieurs défis techniques et méthodologiques, notamment :</p>
+<ul class="simple">
+<li><p><strong>Qualité et disponibilité des données :</strong> L’exactitude des prévisions dépend fortement de la qualité des données historiques (production solaire, consommation, prix). Les données manquantes, bruitées ou mal synchronisées peuvent impacter les performances des modèles.</p></li>
+<li><p><strong>Hétérogénéité des séries temporelles :</strong> Les trois séries principales (production, consommation, coût) peuvent avoir des fréquences, des échelles et des dynamiques différentes, ce qui complique leur modélisation conjointe.</p></li>
+<li><p><strong>Saisonnalité et variabilité :</strong> La production solaire dépend fortement de la météo et des saisons. Capturer ces variations avec précision nécessite des modèles robustes.</p></li>
+<li><p><strong>Choix du modèle de prévision :</strong> Identifier le modèle le plus adapté (classique ou basé sur l’apprentissage profond) demande une phase d’expérimentation importante et une évaluation rigoureuse.</p></li>
+<li><p><strong>Simulation économique réaliste :</strong> Traduire les prévisions en économies financières nécessite de prendre en compte plusieurs paramètres comme l’autoconsommation, les pertes, l’évolution des prix, ou encore les coûts d’installation.</p></li>
+<li><p><strong>Généralisation :</strong> Le modèle doit être suffisamment flexible pour être utilisé sur d’autres jeux de données ou configurations de panneaux solaires.</p></li>
 </ul>
 </section>
 <section id="a-propos-des-donnees">
