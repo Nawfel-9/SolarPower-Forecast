@@ -9,10 +9,6 @@ Ce projet a pour objectif de réaliser une prévision temporelle de l'énergie p
 
 Ce projet s'inscrit dans une logique de transition énergétique et d'optimisation des investissements dans les énergies renouvelables.
 
-
-
-
-
 Objectif:
 ------------
 - **Développer un modèle de prévision** de la consommation d'énergie en utilisant des panneaux solaires photovoltaïques, en exploitant les données historiques de consommation d'énergie et de production solaire.
@@ -20,6 +16,23 @@ Objectif:
 - **Analyser les tendances et les facteurs d'influence** (ensoleillement, température, encrassement des panneaux, etc.) sur la production d'énergie solaire et la demande en énergie.
 - **Évaluer les performances du modèle** à l'aide de métriques appropriées (RMSE, MAE, R²) et optimiser les hyperparamètres pour une meilleure précision dans les prévisions.
 - **Utiliser les prévisions pour déterminer le nombre de panneaux solaires nécessaires** afin de répondre aux besoins énergétiques tout en maximisant l'efficacité énergétique.
+
+Défis à relever:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+La réalisation de ce projet soulève plusieurs défis techniques et méthodologiques, notamment :
+
+- **Qualité et disponibilité des données :** L'exactitude des prévisions dépend fortement de la qualité des données historiques (production solaire, consommation, prix). Les données manquantes, bruitées ou mal synchronisées peuvent impacter les performances des modèles.
+
+- **Hétérogénéité des séries temporelles :** Les trois séries principales (production, consommation, coût) peuvent avoir des fréquences, des échelles et des dynamiques différentes, ce qui complique leur modélisation conjointe.
+
+- **Saisonnalité et variabilité :** La production solaire dépend fortement de la météo et des saisons. Capturer ces variations avec précision nécessite des modèles robustes.
+
+- **Choix du modèle de prévision :** Identifier le modèle le plus adapté (classique ou basé sur l'apprentissage profond) demande une phase d'expérimentation importante et une évaluation rigoureuse.
+
+- **Simulation économique réaliste :** Traduire les prévisions en économies financières nécessite de prendre en compte plusieurs paramètres comme l'autoconsommation, les pertes, l'évolution des prix, ou encore les coûts d'installation.
+
+- **Généralisation :** Le modèle doit être suffisamment flexible pour être utilisé sur d'autres jeux de données ou configurations de panneaux solaires.
+
 
 À propos des données:
 ------------------------
