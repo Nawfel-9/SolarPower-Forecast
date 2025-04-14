@@ -1,0 +1,251 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Irradiance en Plan des Modules (POA) &mdash; Documentation SolarPower-Forecast </title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=d1a510d7"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=e6b791cb"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Recherche" href="search.html" />
+    <link rel="prev" title="Pipeline" href="pipeline.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SolarPower-Forecast
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Rechercher docs" aria-label="Rechercher docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table des matières:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="solarPower_Forecast.html">SolarPower Forecast</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipeline.html">Pipeline</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Irradiance en Plan des Modules (POA)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#qu-est-ce-que-l-irradiance-poa">Qu’est-ce que l’irradiance POA ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#methode-de-calcul-de-l-irradiance-poa">Méthode de calcul de l’irradiance POA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#estimation-de-l-energie-produite-a-partir-de-la-poa">Estimation de l’énergie produite à partir de la POA</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#remarques">Remarques :</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#calcul-de-la-temperature-de-la-cellule-et-de-la-puissance">Calcul de la Température de la Cellule et de la Puissance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#calcul-de-la-temperature-de-la-cellule">1. Calcul de la Température de la Cellule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calcul-de-la-puissance-dc-modele-pvwatts">2. Calcul de la Puissance DC (Modèle PVWatts)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#exemple">Exemple :</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#conversion-de-la-puissance-dc-en-puissance-ac">3. Conversion de la Puissance DC en Puissance AC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SolarPower-Forecast</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Irradiance en Plan des Modules (POA)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/poa.rst.txt" rel="nofollow"> Afficher la source de la page</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="irradiance-en-plan-des-modules-poa">
+<h1>Irradiance en Plan des Modules (POA)<a class="headerlink" href="#irradiance-en-plan-des-modules-poa" title="Lien vers cette rubrique"></a></h1>
+<section id="qu-est-ce-que-l-irradiance-poa">
+<h2>Qu’est-ce que l’irradiance POA ?<a class="headerlink" href="#qu-est-ce-que-l-irradiance-poa" title="Lien vers cette rubrique"></a></h2>
+<p>L’irradiance en plan des modules (Plane of Array - POA) représente la quantité de rayonnement solaire reçue par une surface inclinée, comme celle d’un panneau photovoltaïque. Contrairement à une surface horizontale, les panneaux solaires sont souvent inclinés pour maximiser la réception du rayonnement. Le calcul de l’irradiance POA est donc essentiel pour estimer précisément la production d’énergie solaire.</p>
+<p>L’irradiance POA est constituée de trois composantes principales :</p>
+<ol class="arabic simple">
+<li><p><strong>Irradiance directe (beam)</strong> : lumière solaire reçue directement du soleil.</p></li>
+<li><p><strong>Irradiance diffuse</strong> : lumière dispersée par l’atmosphère.</p></li>
+<li><p><strong>Irradiance réfléchie (albédo)</strong> : lumière réfléchie par le sol vers le panneau.</p></li>
+</ol>
+</section>
+<section id="methode-de-calcul-de-l-irradiance-poa">
+<h2>Méthode de calcul de l’irradiance POA<a class="headerlink" href="#methode-de-calcul-de-l-irradiance-poa" title="Lien vers cette rubrique"></a></h2>
+<p>L’irradiance totale sur le plan des modules, notée <span class="math notranslate nohighlight">\(G_{POA}\)</span>, est la somme de ces trois composantes :</p>
+<div class="math notranslate nohighlight">
+\[G_{POA} = G_{b,POA} + G_{d,POA} + G_{r,POA}\]</div>
+<p>Où :</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(G_{b,POA}\)</span> est la composante directe,</p></li>
+<li><p><span class="math notranslate nohighlight">\(G_{d,POA}\)</span> est la composante diffuse,</p></li>
+<li><p><span class="math notranslate nohighlight">\(G_{r,POA}\)</span> est la composante réfléchie (albédo).</p></li>
+</ul>
+<p>Les composantes sont calculées comme suit :</p>
+<p><strong>1. Angle d’incidence (AOI)</strong></p>
+<div class="math notranslate nohighlight">
+\[\cos(\theta) = \cos(\beta) \sin(E) + \sin(\beta) \cos(E) \cos(A_s - A_p)\]</div>
+<p>Avec :
+- <span class="math notranslate nohighlight">\(E\)</span> : Angle d’élévation solaire (calculé comme <span class="math notranslate nohighlight">\(90^\circ - SZA\)</span>)
+- <span class="math notranslate nohighlight">\(A_s\)</span> : Azimut du soleil
+- <span class="math notranslate nohighlight">\(A_p\)</span> : Azimut du panneau
+- <span class="math notranslate nohighlight">\(\beta\)</span> : Inclinaison du panneau</p>
+<p><strong>2. Irradiance directe</strong></p>
+<div class="math notranslate nohighlight">
+\[G_{b,POA} = G_b \cdot \cos(\theta)\]</div>
+<p>Avec <span class="math notranslate nohighlight">\(G_b\)</span> l’irradiance normale directe (DNI).</p>
+<p><strong>3. Irradiance diffuse (modèle isotropique)</strong></p>
+<div class="math notranslate nohighlight">
+\[G_{d,POA} = G_d \cdot \frac{1 + \cos(\beta)}{2}\]</div>
+<p>Avec <span class="math notranslate nohighlight">\(G_d\)</span> l’irradiance horizontale diffuse (DHI).</p>
+<p><strong>4. Irradiance réfléchie (albédo)</strong></p>
+<div class="math notranslate nohighlight">
+\[G_{r,POA} = G \cdot \rho \cdot \frac{1 - \cos(\beta)}{2}\]</div>
+<p>Avec :
+- <span class="math notranslate nohighlight">\(G\)</span> : Irradiance horizontale globale (GHI),
+- <span class="math notranslate nohighlight">\(\rho\)</span> : Albédo (coefficient de réflexion du sol).</p>
+</section>
+<section id="estimation-de-l-energie-produite-a-partir-de-la-poa">
+<h2>Estimation de l’énergie produite à partir de la POA<a class="headerlink" href="#estimation-de-l-energie-produite-a-partir-de-la-poa" title="Lien vers cette rubrique"></a></h2>
+<p>Une fois l’irradiance POA calculée, l’énergie électrique générée par les panneaux peut être estimée par :</p>
+<div class="math notranslate nohighlight">
+\[E = G_{POA} \cdot A \cdot \eta\]</div>
+<p>Où :
+- <span class="math notranslate nohighlight">\(E\)</span> : énergie générée (en Wh),
+- <span class="math notranslate nohighlight">\(G_{POA}\)</span> : irradiance sur le plan du module (en W/m²),
+- <span class="math notranslate nohighlight">\(A\)</span> : surface totale des panneaux (en m²),
+- <span class="math notranslate nohighlight">\(\eta\)</span> : rendement global du système photovoltaïque (efficacité du module et pertes système).</p>
+<section id="remarques">
+<h3>Remarques :<a class="headerlink" href="#remarques" title="Lien vers cette rubrique"></a></h3>
+<ul class="simple">
+<li><p>L’angle d’élévation solaire (<span class="math notranslate nohighlight">\(E\)</span>) peut être obtenu via <span class="math notranslate nohighlight">\(E = 90^\circ - SZA\)</span>.</p></li>
+<li><p>L’azimut solaire peut être calculé automatiquement avec la bibliothèque Python <cite>pvlib</cite>.</p></li>
+</ul>
+<p>Cette méthode permet d’obtenir une estimation réaliste de l’énergie produite à partir de données météorologiques et des caractéristiques d’installation des panneaux photovoltaïques.</p>
+</section>
+</section>
+</section>
+<section id="calcul-de-la-temperature-de-la-cellule-et-de-la-puissance">
+<h1>Calcul de la Température de la Cellule et de la Puissance<a class="headerlink" href="#calcul-de-la-temperature-de-la-cellule-et-de-la-puissance" title="Lien vers cette rubrique"></a></h1>
+<p>Dans cette section, nous estimons la température des cellules photovoltaïques ainsi que la puissance générée par les panneaux solaires. Nous utilisons deux modèles reconnus : le <strong>modèle de Ross</strong> pour la température de la cellule et le <strong>modèle PVWatts</strong> pour la puissance DC. Ces modèles s’appuient sur l’irradiance POA et la température ambiante.</p>
+<section id="calcul-de-la-temperature-de-la-cellule">
+<h2>1. Calcul de la Température de la Cellule<a class="headerlink" href="#calcul-de-la-temperature-de-la-cellule" title="Lien vers cette rubrique"></a></h2>
+<p>La température d’une cellule photovoltaïque (<span class="math notranslate nohighlight">\(T_c\)</span>) est estimée à partir de la température ambiante (<span class="math notranslate nohighlight">\(T_a\)</span>) et de l’irradiance POA (<span class="math notranslate nohighlight">\(G_{POA}\)</span>), selon le <strong>modèle de Ross</strong> :</p>
+<div class="math notranslate nohighlight">
+\[T_c = T_a + k_{\text{ross}} \cdot G_{POA}\]</div>
+<p>Où :</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(T_a\)</span> : Température ambiante (°C),</p></li>
+<li><p><span class="math notranslate nohighlight">\(G_{POA}\)</span> : Irradiance reçue en plan des modules (W/m²),</p></li>
+<li><p><span class="math notranslate nohighlight">\(k_{\text{ross}}\)</span> : Coefficient empirique de température, défini comme :</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[k_{\text{ross}} = \frac{NOCT - 20}{800}\]</div>
+<p>Avec <cite>NOCT</cite> la température nominale de fonctionnement de la cellule (en général entre 42°C et 48°C). Cette relation suppose des conditions de référence avec un vent modéré et une irradiance de 800 W/m².</p>
+</section>
+<section id="calcul-de-la-puissance-dc-modele-pvwatts">
+<h2>2. Calcul de la Puissance DC (Modèle PVWatts)<a class="headerlink" href="#calcul-de-la-puissance-dc-modele-pvwatts" title="Lien vers cette rubrique"></a></h2>
+<p>Une fois la température de la cellule estimée, nous utilisons le <strong>modèle PVWatts</strong> pour calculer la puissance DC produite par les modules photovoltaïques :</p>
+<div class="math notranslate nohighlight">
+\[P_{\text{DC}} = G_{POA} \cdot P_{\text{nom}} \cdot (1 + \gamma \cdot (T_c - T_{ref}))\]</div>
+<p>Où :</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(P_{\text{DC}}\)</span> : Puissance en courant continu (W),</p></li>
+<li><p><span class="math notranslate nohighlight">\(P_{\text{nom}}\)</span> : Puissance nominale du panneau (W),</p></li>
+<li><p><span class="math notranslate nohighlight">\(\gamma\)</span> : Coefficient de perte de performance par degré de température (valeur typique : -0.003 à -0.005 /°C),</p></li>
+<li><p><span class="math notranslate nohighlight">\(T_{ref}\)</span> : Température de référence, souvent fixée à 25°C.</p></li>
+</ul>
+<p>Ce modèle prend en compte la diminution d’efficacité du module avec l’augmentation de la température.</p>
+<section id="exemple">
+<h3>Exemple :<a class="headerlink" href="#exemple" title="Lien vers cette rubrique"></a></h3>
+<p>Pour une petite centrale contenant 10 000 panneaux d’une puissance nominale de 750 W chacun, la puissance installée totale est :</p>
+<div class="math notranslate nohighlight">
+\[P_{\text{installée}} = 10\ 000 \cdot 750 = 7.5\ MW\]</div>
+<p>À titre de comparaison, la centrale solaire Noor Ouarzazate utilise plus de 200 000 panneaux.</p>
+<ul class="simple">
+<li><p>Panneau de référence utilisé : <a class="reference external" href="https://www.enfsolar.com/pv/panel-datasheet/crystalline/65662">SR6-HJT725-750M</a></p></li>
+</ul>
+</section>
+</section>
+<section id="conversion-de-la-puissance-dc-en-puissance-ac">
+<h2>3. Conversion de la Puissance DC en Puissance AC<a class="headerlink" href="#conversion-de-la-puissance-dc-en-puissance-ac" title="Lien vers cette rubrique"></a></h2>
+<p>La puissance AC injectée sur le réseau est obtenue en appliquant un facteur d’efficacité représentant l’onduleur :</p>
+<div class="math notranslate nohighlight">
+\[P_{\text{AC}} = P_{\text{DC}} \cdot \eta\]</div>
+<p>Où :</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\eta\)</span> : Efficacité de conversion de l’onduleur, généralement comprise entre 0.85 et 0.95 selon les modèles.</p></li>
+</ul>
+<p>Ce calcul permet d’estimer la puissance réellement disponible après conversion, prenant en compte les pertes dues aux rendements des équipements électriques (ondulation, câblage, etc.).</p>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Lien vers cette rubrique"></a></h2>
+<p>Ces étapes — estimation de la température des cellules, calcul de la puissance DC, puis conversion en AC — permettent de simuler la production d’énergie électrique d’une installation photovoltaïque à partir de données météo, en intégrant les pertes thermiques et électriques.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pied de page">
+        <a href="pipeline.html" class="btn btn-neutral float-left" title="Pipeline" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Précédent</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Droits d'auteur 2025, EL KHAMKHOUMI Naoufal, BOUDRIKA Ilias.</p>
+  </div>
+
+  Compilé avec <a href="https://www.sphinx-doc.org/">Sphinx</a> en utilisant un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a>
+    fourni par <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
