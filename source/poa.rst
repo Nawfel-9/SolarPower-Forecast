@@ -12,7 +12,7 @@ L'irradiance POA est constituée de trois composantes principales :
 3. **Irradiance réfléchie (albédo)** : lumière réfléchie par le sol vers le panneau.
 
 Méthode de calcul de l'irradiance POA
--------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 L'irradiance totale sur le plan des modules, notée :math:`G_{POA}`, est la somme de ces trois composantes :
 
 .. math::
@@ -66,7 +66,7 @@ Avec :
 - :math:`\rho` : Albédo (coefficient de réflexion du sol).
 
 Estimation de l'énergie produite à partir de la POA
----------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Une fois l'irradiance POA calculée, l'énergie électrique générée par les panneaux peut être estimée par :
 
 .. math::
@@ -87,12 +87,12 @@ Remarques :
 Cette méthode permet d'obtenir une estimation réaliste de l'énergie produite à partir de données météorologiques et des caractéristiques d'installation des panneaux photovoltaïques.
 
 Calcul de la Température de la Cellule et de la Puissance
-==========================================================
+-----------------------------------------------------------
 
 Dans cette section, nous estimons la température des cellules photovoltaïques ainsi que la puissance générée par les panneaux solaires. Nous utilisons deux modèles reconnus : le **modèle de Ross** pour la température de la cellule et le **modèle PVWatts** pour la puissance DC. Ces modèles s'appuient sur l'irradiance POA et la température ambiante.
 
 1. Calcul de la Température de la Cellule
------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 La température d'une cellule photovoltaïque (:math:`T_c`) est estimée à partir de la température ambiante (:math:`T_a`) et de l'irradiance POA (:math:`G_{POA}`), selon le **modèle de Ross** :
 
 .. math::
@@ -112,7 +112,7 @@ Où :
 Avec `NOCT` la température nominale de fonctionnement de la cellule (en général entre 42°C et 48°C). Cette relation suppose des conditions de référence avec un vent modéré et une irradiance de 800 W/m².
 
 2. Calcul de la Puissance DC (Modèle PVWatts)
----------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Une fois la température de la cellule estimée, nous utilisons le **modèle PVWatts** pour calculer la puissance DC produite par les modules photovoltaïques :
 
 .. math::
@@ -141,7 +141,7 @@ Pour une petite centrale contenant 10 000 panneaux d'une puissance nominale de 7
 - Panneau de référence utilisé : `SR6-HJT725-750M <https://www.enfsolar.com/pv/panel-datasheet/crystalline/65662>`_
 
 3. Conversion de la Puissance DC en Puissance AC
-------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 La puissance AC injectée sur le réseau est obtenue en appliquant un facteur d'efficacité représentant l'onduleur :
 
 .. math::

@@ -76,7 +76,15 @@ Le projet se compose de sept phases principales, comme illustré dans la figure 
 
    * Économie = (production autoconsommée × prix de l'électricité)
 
-   * Simulation selon le nombre de panneaux (par palier : 10, 20, 50, 100, etc.)
+   * Simulation selon le nombre de panneaux (par palier : 10000, etc.)
 
    * Visualisation de l'économie potentielle en fonction de l'installation
 
+Flux de travail
+---------------------------------------
+
+.. figure:: /Images/Workflow..png
+   :width: 60%
+   :align: center
+   :alt: Flux de travail pour la prévision de la consommation d'énergie et l'évaluation des économies liées aux panneaux solaires
+   :name: workflow

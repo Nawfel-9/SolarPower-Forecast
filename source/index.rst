@@ -21,4 +21,4 @@ Documentation de SolarPower Forecast
    solarPower_Forecast.rst
    pipeline.rst
    poa.rst
-
+   forecast.rst
