@@ -19,8 +19,8 @@ Ouvrez votre terminal ou invite de commandes et exécutez les commandes suivante
 
 .. code-block:: bash
 
-    git clone https://github.com/Nawfel-9/SolarPower-Forecast.git
-    cd SolarPower-Forecast
+    git clone https://github.com/Nawfel-9/solar_forecasting_project
+    cd solar_forecasting_project
 
 **b. Créer et Activer un Environnement Virtuel**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
