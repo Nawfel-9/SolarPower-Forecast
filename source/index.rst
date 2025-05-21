@@ -19,6 +19,7 @@ Documentation de SolarPower Forecast
    :caption: Table des matières:
    
    solarPower_Forecast.rst
+   setup.rst
    pipeline.rst
    poa.rst
    forecast.rst
