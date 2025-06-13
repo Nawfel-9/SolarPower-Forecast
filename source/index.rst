@@ -18,8 +18,10 @@ Documentation de SolarPower Forecast
    :maxdepth: 2
    :caption: Table des matières:
    
-   solarPower_Forecast.rst
-   setup.rst
+   introduction.rst
+   installation.rst
    pipeline.rst
    poa.rst
    forecast.rst
+   recherche.rst
+   conclusion.rst

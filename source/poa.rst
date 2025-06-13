@@ -1,161 +1,100 @@
+.. _poa:
+
+===============================================================
+De l'Irradiance Solaire à la Production d'Énergie Électrique
+===============================================================
+
+Pour prédire la génération d'énergie, il est fondamental de comprendre et de modéliser la conversion du rayonnement solaire en électricité. Cette section détaille les concepts physiques et leur implémentation dans le projet via la bibliothèque ``pvlib``.
+
 Irradiance en Plan des Modules (POA)
-====================================
+------------------------------------
 
-Qu'est-ce que l'irradiance POA ?
---------------------------------
-L'irradiance en plan des modules (Plane of Array - POA) représente la quantité de rayonnement solaire reçue par une surface inclinée, comme celle d'un panneau photovoltaïque. Contrairement à une surface horizontale, les panneaux solaires sont souvent inclinés pour maximiser la réception du rayonnement. Le calcul de l'irradiance POA est donc essentiel pour estimer précisément la production d’énergie solaire.
+L'irradiance en plan des modules (Plane of Array - POA) représente la quantité totale de rayonnement solaire qui frappe une surface inclinée, comme celle d'un panneau photovoltaïque. C'est la métrique la plus importante pour estimer la production d'énergie.
 
-L'irradiance POA est constituée de trois composantes principales :
+L'irradiance POA se décompose en trois composantes :
 
-1. **Irradiance directe (beam)** : lumière solaire reçue directement du soleil.
-2. **Irradiance diffuse** : lumière dispersée par l’atmosphère.
-3. **Irradiance réfléchie (albédo)** : lumière réfléchie par le sol vers le panneau.
-
-Méthode de calcul de l'irradiance POA
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-L'irradiance totale sur le plan des modules, notée :math:`G_{POA}`, est la somme de ces trois composantes :
+1.  **Irradiance Directe (*Beam*)** : Rayonnement provenant directement du disque solaire.
+2.  **Irradiance Diffuse (*Diffuse*)** : Rayonnement dispersé par les nuages et l'atmosphère.
+3.  **Irradiance Réfléchie (*Reflected*)** : Rayonnement réfléchi par le sol et d'autres surfaces vers le panneau.
 
 .. math::
 
-    G_{POA} = G_{b,POA} + G_{d,POA} + G_{r,POA}
+    G_{\text{POA}} = G_{\text{directe, POA}} + G_{\text{diffuse, POA}} + G_{\text{réfléchie, POA}}
 
-Où :
+Implémentation dans le Projet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Le calcul manuel de ces composantes nécessite des modèles géométriques et atmosphériques complexes. Heureusement, la bibliothèque ``pvlib`` encapsule cette complexité.
 
-- :math:`G_{b,POA}` est la composante directe,
-- :math:`G_{d,POA}` est la composante diffuse,
-- :math:`G_{r,POA}` est la composante réfléchie (albédo).
+Dans le script ``generated_energy_estimation.py``, nous utilisons la fonction ``pvlib.irradiance.get_total_irradiance`` qui calcule la POA totale en se basant sur la position du soleil, l'orientation du panneau et les composantes du rayonnement mesurées au sol (GHI, DNI, DHI).
 
-Les composantes sont calculées comme suit :
+.. code-block:: python
+   :emphasize-lines: 3
 
-**1. Angle d'incidence (AOI)**
+    # Calcul de la position du soleil
+    solpos = pvlib.solarposition.get_solarposition(df.index, latitude, longitude)
 
-.. math::
+    # Calcul de l'irradiance totale sur le plan des panneaux (POA)
+    poa_irradiance = pvlib.irradiance.get_total_irradiance(
+        surface_tilt=surface_tilt,
+        surface_azimuth=180, # Orienté plein sud
+        solar_zenith=solpos['zenith'],
+        solar_azimuth=solpos['azimuth'],
+        dni=df['DNI'],
+        ghi=df['GHI'],
+        dhi=df['DHI'],
+        albedo=albedo
+    ).fillna(0)
 
-    \cos(\theta) = \cos(\beta) \sin(E) + \sin(\beta) \cos(E) \cos(A_s - A_p)
+De l'Irradiance à la Puissance Électrique
+------------------------------------------
+Une fois que nous connaissons la quantité d'énergie solaire qui frappe les panneaux (:math:`G_{\text{POA}}`), nous devons la convertir en puissance électrique. Ce processus dépend de deux facteurs principaux : la **température des cellules** et les **caractéristiques intrinsèques du module**.
 
-Avec :
-- :math:`E` : Angle d'élévation solaire (calculé comme :math:`90^\circ - SZA`)
-- :math:`A_s` : Azimut du soleil
-- :math:`A_p` : Azimut du panneau
-- :math:`\beta` : Inclinaison du panneau
+1. Température de Cellule
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+La performance d'un panneau photovoltaïque diminue à mesure que sa température augmente. Il est donc crucial de l'estimer.
 
-**2. Irradiance directe**
+* **Implémentation** : Le projet utilise le *Sandia Array Performance Model (SAPM)*, un modèle reconnu implémenté dans ``pvlib``. Il estime la température des cellules en fonction de l'irradiance, de la température ambiante et de la vitesse du vent.
 
-.. math::
+.. code-block:: python
 
-    G_{b,POA} = G_b \cdot \cos(\theta)
+    # Estime la température des cellules photovoltaïques
+    df['cell_temperature'] = pvlib.temperature.sapm_cell(
+        poa_global=poa_irradiance['poa_global'],
+        temp_ambient=df['Ambient Temperature'],
+        wind_speed=1.0 # Vitesse du vent supposée constante
+    )
 
-Avec :math:`G_b` l'irradiance normale directe (DNI).
 
-**3. Irradiance diffuse (modèle isotropique)**
+2. Puissance en Courant Continu (DC)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+La puissance DC finale est calculée en utilisant le modèle **PVWatts**, qui est largement utilisé par le NREL (National Renewable Energy Laboratory). Ce modèle prend en compte la puissance nominale du système, l'irradiance effective reçue et les pertes de performance dues à la température.
 
-.. math::
+* **Implémentation** :
 
-    G_{d,POA} = G_d \cdot \frac{1 + \cos(\beta)}{2}
+.. code-block:: python
 
-Avec :math:`G_d` l'irradiance horizontale diffuse (DHI).
+    # Calcule la puissance DC en utilisant le modèle PVWatts
+    power_dc = pvlib.pvsystem.pvwatts_dc(
+        g_poa_effective=poa_irradiance['poa_global'],
+        temp_cell=df['cell_temperature'],
+        pdc0=system_pdc0_watts, # Puissance nominale DC du système total
+        gamma_pdc=temp_coeff_pdc # Coefficient de perte de puissance par °C
+    ).fillna(0)
 
-**4. Irradiance réfléchie (albédo)**
+.. note::
+    Les paramètres ``system_pdc0_watts`` (puissance nominale totale du système de référence) et ``temp_coeff_pdc`` (coefficient de température) sont définis dans le fichier ``config.yaml``. Ces valeurs sont typiquement issues de la fiche technique du panneau solaire, comme le `SR6-HJT725-750M <https://www.enfsolar.com/pv/panel-datasheet/crystalline/65662>`_ utilisé comme référence dans ce projet.
 
-.. math::
-
-    G_{r,POA} = G \cdot \rho \cdot \frac{1 - \cos(\beta)}{2}
-
-Avec :
-- :math:`G` : Irradiance horizontale globale (GHI),
-- :math:`\rho` : Albédo (coefficient de réflexion du sol).
-
-Estimation de l'énergie produite à partir de la POA
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Une fois l'irradiance POA calculée, l'énergie électrique générée par les panneaux peut être estimée par :
-
-.. math::
-
-    E = G_{POA} \cdot A \cdot \eta
-
-Où :
-- :math:`E` : énergie générée (en Wh),
-- :math:`G_{POA}` : irradiance sur le plan du module (en W/m²),
-- :math:`A` : surface totale des panneaux (en m²),
-- :math:`\eta` : rendement global du système photovoltaïque (efficacité du module et pertes système).
-
-Remarques :
-^^^^^^^^^^^
-- L'angle d'élévation solaire (:math:`E`) peut être obtenu via :math:`E = 90^\circ - SZA`.
-- L'azimut solaire peut être calculé automatiquement avec la bibliothèque Python `pvlib`.
-
-Cette méthode permet d'obtenir une estimation réaliste de l'énergie produite à partir de données météorologiques et des caractéristiques d'installation des panneaux photovoltaïques.
-
-Calcul de la Température de la Cellule et de la Puissance
------------------------------------------------------------
-
-Dans cette section, nous estimons la température des cellules photovoltaïques ainsi que la puissance générée par les panneaux solaires. Nous utilisons deux modèles reconnus : le **modèle de Ross** pour la température de la cellule et le **modèle PVWatts** pour la puissance DC. Ces modèles s'appuient sur l'irradiance POA et la température ambiante.
-
-1. Calcul de la Température de la Cellule
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-La température d'une cellule photovoltaïque (:math:`T_c`) est estimée à partir de la température ambiante (:math:`T_a`) et de l'irradiance POA (:math:`G_{POA}`), selon le **modèle de Ross** :
+3. Conversion en Puissance AC (Optionnelle)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Bien que notre modèle LSTM soit entraîné sur la puissance DC, il est bon de noter que la puissance finale injectée dans le réseau (AC) serait légèrement inférieure en raison des pertes de conversion dans l'onduleur.
 
 .. math::
 
-    T_c = T_a + k_{\text{ross}} \cdot G_{POA}
+   P_{\text{AC}} = P_{\text{DC}} \cdot \eta_{\text{onduleur}}
 
-Où :
+L'efficacité de l'onduleur (:math:`\eta_{\text{onduleur}}`) est prise en compte dans la phase de simulation financière de l'application via le paramètre ``panel_efficiency``.
 
-- :math:`T_a` : Température ambiante (°C),
-- :math:`G_{POA}` : Irradiance reçue en plan des modules (W/m²),
-- :math:`k_{\text{ross}}` : Coefficient empirique de température, défini comme :
-
-.. math::
-
-    k_{\text{ross}} = \frac{NOCT - 20}{800}
-
-Avec `NOCT` la température nominale de fonctionnement de la cellule (en général entre 42°C et 48°C). Cette relation suppose des conditions de référence avec un vent modéré et une irradiance de 800 W/m².
-
-2. Calcul de la Puissance DC (Modèle PVWatts)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Une fois la température de la cellule estimée, nous utilisons le **modèle PVWatts** pour calculer la puissance DC produite par les modules photovoltaïques :
-
-.. math::
-
-    P_{\text{DC}} = G_{POA} \cdot P_{\text{nom}} \cdot (1 + \gamma \cdot (T_c - T_{ref}))
-
-Où :
-
-- :math:`P_{\text{DC}}` : Puissance en courant continu (W),
-- :math:`P_{\text{nom}}` : Puissance nominale du panneau (W),
-- :math:`\gamma` : Coefficient de perte de performance par degré de température (valeur typique : -0.003 à -0.005 /°C),
-- :math:`T_{ref}` : Température de référence, souvent fixée à 25°C.
-
-Ce modèle prend en compte la diminution d'efficacité du module avec l'augmentation de la température.
-
-Exemple :
-^^^^^^^^^
-Pour une petite centrale contenant 10 000 panneaux d'une puissance nominale de 750 W chacun, la puissance installée totale est :
-
-.. math::
-
-    P_{\text{installée}} = 10\ 000 \cdot 750 = 7.5\ MW
-
-À titre de comparaison, la centrale solaire Noor Ouarzazate utilise plus de 200 000 panneaux.
-
-- Panneau de référence utilisé : `SR6-HJT725-750M <https://www.enfsolar.com/pv/panel-datasheet/crystalline/65662>`_
-
-3. Conversion de la Puissance DC en Puissance AC
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-La puissance AC injectée sur le réseau est obtenue en appliquant un facteur d'efficacité représentant l'onduleur :
-
-.. math::
-
-    P_{\text{AC}} = P_{\text{DC}} \cdot \eta
-
-Où :
-
-- :math:`\eta` : Efficacité de conversion de l'onduleur, généralement comprise entre 0.85 et 0.95 selon les modèles.
-
-Ce calcul permet d'estimer la puissance réellement disponible après conversion, prenant en compte les pertes dues aux rendements des équipements électriques (ondulation, câblage, etc.).
 
 Conclusion
 ----------
-Ces étapes — estimation de la température des cellules, calcul de la puissance DC, puis conversion en AC — permettent de simuler la production d'énergie électrique d'une installation photovoltaïque à partir de données météo, en intégrant les pertes thermiques et électriques.
-
-
+En combinant ces modèles physiques robustes de la bibliothèque ``pvlib``, nous sommes capables de générer un jeu de données de production d'énergie horaire synthétique mais réaliste. Ce jeu de données de haute qualité est la fondation sur laquelle repose l'entraînement de notre modèle de prévision LSTM.
